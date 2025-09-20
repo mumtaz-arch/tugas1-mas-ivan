@@ -18,10 +18,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+		'username',
         'name',
         'email',
         'password',
-    ];
+    ]; //fungsinya buat nama nama kolom tabel users
 
     /**
      * The attributes that should be hidden for serialization.
