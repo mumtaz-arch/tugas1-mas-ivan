@@ -53,10 +53,10 @@ Route::get('/newposts/{id}',[
 	App\Http\Controllers\PostnewController::class,'show'
 ]);
 
-Route::put('/newposts/{id}/update',[
+Route::get('/newposts/{id}/update',[
 	App\Http\Controllers\PostnewController::class,'update'
 ]);
 
-Route::delete('/newposts/{id}/delete',[
+Route::get('/newposts/{id}/delete',[
 	App\Http\Controllers\PostnewController::class,'destroy'
 ]);
