@@ -28,3 +28,35 @@ Route::get('/posts',[
 ]);
 
 Route::resource('posts', App\Http\Controllers\PostController::class);
+
+//menentukan nilai ganjil genap di route
+Route::get('/ganjil/{number}', function ($number) {
+	if ($number % 2 == 0) {
+		dd("$number adalah bilangan genap");
+	} else {
+		dd("$number adalah bilangan ganjil");
+	}
+});
+
+
+//NEW POST MAS IVAN NO UI
+
+Route::get('/newposts',[
+	App\Http\Controllers\PostnewController::class,'index'
+]);
+
+Route::get('/newposts/create',[
+	App\Http\Controllers\PostnewController::class,'create'
+]);
+
+Route::get('/newposts/{id}',[
+	App\Http\Controllers\PostnewController::class,'show'
+]);
+
+Route::put('/newposts/{id}/update',[
+	App\Http\Controllers\PostnewController::class,'update'
+]);
+
+Route::delete('/newposts/{id}/delete',[
+	App\Http\Controllers\PostnewController::class,'destroy'
+]);

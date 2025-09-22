@@ -9,7 +9,7 @@
 <body>
 	<h1>Tabel post</h1>
 	<a href="{{ route('posts.create') }}">tambah post</a>
-	<table>
+	<table style="border-collapse: collapse; width: 100%;" border="1">
 		<tr>
 			<th>No</th>
 			<th>Judul</th>
