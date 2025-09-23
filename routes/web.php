@@ -27,7 +27,7 @@ Route::get('/posts',[
 	App\Http\Controllers\PostController::class,'index'
 ]);
 
-Route::resource('posts', App\Http\Controllers\PostController::class);
+Route::resource('posts', App\Http\Controllers\PostController::class);//otomatis pake semua route CRUD
 
 //menentukan nilai ganjil genap di route
 Route::get('/ganjil/{number}', function ($number) {
