@@ -13,7 +13,7 @@ class PostController extends Controller
      */
     public function index()
     {
-		$posts = Post::latest()->simplePaginate(5); // kasih tampil cuma 5 halaman saja
+		$posts = Post::latest()->paginate(5); // kasih tampil cuma 5 halaman saja
         // $posts = Post::all(); //tampil semua ini
 		$date = date('Y-m-d');
 		// dd($posts);
@@ -63,7 +63,7 @@ class PostController extends Controller
 			'user_id' => 1, //static user_id
 		]);
 		// dd($post);
-		return redirect()->route('posts.index')->with('Sukses', 'berhasil dibuat coy!');
+		return redirect()->route('posts.index')->with('success', 'berhasil dibuat coy!');
 
 		//seperti INSERT INTO posts (title, content, published_at, image, user_id) VALUES (...)
     }
@@ -108,7 +108,7 @@ class PostController extends Controller
 		$post->published_at = $validated['published_at'];
 		$post->save();
 
-		return redirect()->route('posts.index')->with('Sukses', 'sudah update!');
+		return redirect()->route('posts.index')->with('success', 'sudah update!');
     }
 
     /**
@@ -118,6 +118,6 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 		$post->delete();
-		return redirect()->route('posts.index')->with('Sukses', 'hilang!');
+		return redirect()->route('posts.index')->with('success', 'data suddah di hilangkan!');
     }
 }
