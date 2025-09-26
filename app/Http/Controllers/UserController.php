@@ -2,36 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
-	{
-		$users = User::all();
-		//SELECT * FROM users;
+    {
+        //
+    }
 
-		$user = User::find(1);
-		//SELECT * FROM users WHERE id = 1;
-		//berdasarkan id
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
 
-		$user = User::where('username','=', 'fakhri')->first();
-		//SELECT * FROM users WHERE username = 'fakhri' LIMIT 1;
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
 
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
+    {
+        //
+    }
 
-		dd($users);
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
 
-	
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
 
-	$user = User::create([
-		'username' => 'fakhri',
-		'name' => 'Fakhri',
-		'email' => 'fakhri@example.com',
-		'password' => bcrypt('password'),
-	]);
-	}
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }
-
-
-
