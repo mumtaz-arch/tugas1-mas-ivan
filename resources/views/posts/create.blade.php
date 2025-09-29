@@ -8,6 +8,7 @@
 	<title>Tambah data</title>
 </head>
 <body>
+	{{-- {{dd(session('errors')('image'))}} --}}
 	<h1>Tambah Post</h1>
 	<form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
 		@csrf
@@ -22,6 +23,9 @@
 		<div>
 			<label for="image">Gambar:</label>
 			<input type="file" id="image" name="image">
+			@error('image')
+       			<div class="text-danger">{{ $message }}</div>
+    		@enderror
 		</div>
 		<div>
 			<label for="published_at">Tanggal Terbit:</label>

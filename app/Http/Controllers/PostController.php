@@ -50,7 +50,7 @@ class PostController extends Controller
 		//simpan gambar di public bukan di storage
 		$imageName = null;
 		if ($request->hasFile('image')) {
-			$imageName = time().'_'.$request->image->extension();
+			$imageName = time().'.'.$request->image->extension();
 			$request->image->move(public_path('image'), $imageName);
 		}
 
@@ -79,9 +79,9 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
+        // $post = Post::findOrFail($id);
 		return view('posts.edit', compact('post'));
     }
 
@@ -99,7 +99,11 @@ class PostController extends Controller
 
 		$post = Post::findOrFail($id);
 		if ($request->hasFile('image')) {
-			$imageName = time().'_'.$request->image->extension();
+			$oldImage = public_path('image/' . $post->image);
+			if(file_exists($oldImage)) {
+				unlink($oldImage);
+			}
+			$imageName = time().'.'.$request->image->extension();
 			$request->image->move(public_path('image'), $imageName);
 			$post->image = $imageName;
 		}
@@ -117,7 +121,17 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
+		$oldImage = public_path('image/' . $post->image);
+		if($post->image && file_exists($oldImage)) {
+			unlink($oldImage);
+		}
+		//atau cara lain
+		// if(file_exists($oldImage)) {
+		// 	unlink($oldImage);
+		// }
 		$post->delete();
-		return redirect()->route('posts.index')->with('success', 'data suddah di hilangkan!');
+
+		return redirect()->route('posts.index')->with('success', 'data sudah di hilangkan!');
+
     }
 }

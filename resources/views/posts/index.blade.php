@@ -61,8 +61,6 @@
 	</table>
 	<div>
 		{{ $posts->links() }}
-	</div>
-
-
+	</div> 
 </body>
 </html>

@@ -12,7 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+		$users = User::all();
+
+        return view('user.index',[
+			'users' => $users
+		]);
     }
 
     /**
@@ -20,7 +24,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+		return view('user.create');
+
+
     }
 
     /**
@@ -28,7 +34,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		
     }
 
     /**
@@ -44,7 +50,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+		return view('user.edit',[
+			'user' => $user
+		]);
     }
 
     /**
@@ -60,6 +69,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+		$user = User::find($id);
+		$user->delete();
+		return redirect()->route('users.index')->with('success','Data user berhasil dihapus');
     }
 }
