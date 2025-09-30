@@ -29,7 +29,7 @@
     		@enderror
 		</div>
 		<div class="mb-3">
-			<label for="photo" class="form-label">Foto</label>
+			<label for="photo" class="form-label">Photo</label>
 			<input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo">
 			@error('photo')
 	   			<div class="text-danger">{{ $message }}</div>

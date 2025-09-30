@@ -41,9 +41,17 @@ class UserController extends Controller
 			'name' => 'required|string |max:255',
 			'email' => 'required|email|unique:users,email',
 			'password' => 'nullable|string|min:6|',
-			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+			'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
-		]);
+		], [
+        // custom message
+        'photo.image' => 'File harus berupa gambar.',
+        'photo.mimes' => 'Gambar harus berformat jpg, jpeg, png.',
+        'photo.max'   => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+
+    ]);
+		//upload photo
+
 		$photoName = null;
 		if ($request->hasFile('photo')) {
 			$photoName = time().'.'.$request->photo->extension();
@@ -92,7 +100,13 @@ class UserController extends Controller
 			'email' => 'required|email|unique:users,email,' . $user->id,
 			'password' => 'nullable|string|min:6',
 			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-		]);
+		], [
+        // custom message
+        'photo.image' => 'File harus berupa gambar.',
+        'photo.mimes' => 'Gambar harus berformat jpg, jpeg, png.',
+        'photo.max'   => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+
+    ]);
 
 		if ($request->hasFile('photo')) {
 			$oldImage = public_path('photos/' . $user->photo);
