@@ -39,6 +39,7 @@
         @if($user->photo)
             <p>Foto saat ini:</p>
             <img src="{{ asset('photos/'.$user->photo) }}" alt="Foto User" width="100">
+			
         @endif
 		@error('photo')
 	   			<div class="text-danger">{{ $message }}</div>

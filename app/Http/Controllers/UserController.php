@@ -110,7 +110,7 @@ class UserController extends Controller
 
 		if ($request->hasFile('photo')) {
 			$oldImage = public_path('photos/' . $user->photo);
-			if(file_exists($oldImage)) {
+			if($user->photo && file_exists($oldImage)) {
 				unlink($oldImage);
 			}
 			$photoName = time() . '.' . $request->photo->extension();
