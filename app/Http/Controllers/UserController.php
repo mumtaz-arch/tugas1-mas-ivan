@@ -48,6 +48,14 @@ class UserController extends Controller
         'photo.image' => 'File harus berupa gambar.',
         'photo.mimes' => 'Gambar harus berformat jpg, jpeg, png.',
         'photo.max'   => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+		'username.required' => 'Username harus diisi.',
+		'name.required' => 'Nama harus diisi.',
+		'email.required' => 'Email harus diisi.',
+		'email.email' => 'Email tidak valid.',
+		'email.unique' => 'Email sudah terdaftar.',
+		'password.min' => 'Password minimal 6 karakter.',
+		'username.unique' => 'Username sudah terdaftar.',
+		
 
     ]);
 		//upload photo
@@ -100,11 +108,18 @@ class UserController extends Controller
 			'email' => 'required|email|unique:users,email,' . $user->id,
 			'password' => 'nullable|string|min:6',
 			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+			'username' => 'required|string|unique:users,username,' . $user->id,
 		], [
         // custom message
-        'photo.image' => 'File harus berupa gambar.',
-        'photo.mimes' => 'Gambar harus berformat jpg, jpeg, png.',
-        'photo.max'   => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+           'photo.image' => 'File harus berupa gambar.',
+			'photo.mimes' => 'Gambar harus berformat jpg, jpeg, png.',
+			'photo.max'   => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+			'username.required' => 'Username harus diisi.',
+			'email.required' => 'Email harus diisi.',
+			'email.email' => 'Email tidak valid.',
+			'email.unique' => 'Email sudah terdaftar.',
+			'password.min' => 'Password minimal 6 karakter.',
+			'username.unique' => 'Username sudah terdaftar.',
 
     ]);
 
