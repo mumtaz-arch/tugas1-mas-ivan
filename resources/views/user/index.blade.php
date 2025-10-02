@@ -40,6 +40,7 @@
 				@endif
 				</td>
 				<td>
+					<a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Lihat</a>
 					<a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
 					<form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
 						@csrf
