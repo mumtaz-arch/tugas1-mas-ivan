@@ -8,7 +8,14 @@
 
 	<div class="navbar-nav">
 		<div class="nav-item text-nowrap">
-			<a class="nav-link px-3" href="#">Sign out</a>
+			{{-- <a class="nav-link px-3" href="#">Sign out</a> --}}
+			<form method="POST" action="{{ route('logout') }}">
+				@csrf
+				<a class="nav-link px-3" href="#"
+					onclick="event.preventDefault();
+								this.closest('form').submit();">Sign Out
+				</a>
+			</form>
 		</div>
 	</div>
 </header>

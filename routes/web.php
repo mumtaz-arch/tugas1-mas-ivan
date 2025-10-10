@@ -1,61 +1,40 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PublicPostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Public routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/posts', [PublicPostController::class, 'index'])->name('public.posts.index');
+Route::get('/postshow/{post}', [PublicPostController::class, 'show'])->name('public.posts.show');
 
-// Route::get('/example', function () {
-// 	return 'This is an example route';
-// });
+// Authenticated routes
+Route::middleware('auth')->group(function () {
 
-// Route::get('/example2', function () {
-// 	return 'This is another example route';
-// });
-
-// Route::get('/example2', [App\Http\Controllers\ExampleController::class, 'index']);
-
-
-Route::get('/example2/{id}', [App\Http\Controllers\ExampleController::class,'index']);
-
-// Route::get('/users',[
-// 	App\Http\Controllers\UserController::class,'index'
-// ]);
-
-Route::get('/posts',[
-	App\Http\Controllers\PostController::class,'index'
-]);
-Route::resource('users', App\Http\Controllers\UserController::class);//otomatis pake semua route CRUD
-
-Route::resource('posts', App\Http\Controllers\PostController::class);//otomatis pake semua route CRUD
-
-//menentukan nilai ganjil genap di route
-Route::get('/ganjil/{number}', function ($number) {
-	if ($number % 2 == 0) {
-		dd("$number adalah bilangan genap");
-	} else {
-		dd("$number adalah bilangan ganjil");
-	}
+    
+    // Profile routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Posts routes
+    // Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    // Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    // Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    // Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    // Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    // Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    // Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::resource('posts', PostController::class);
+    
+    // Admin only routes
+    Route::middleware('Admin')->group(function () {
+        Route::resource('users', UserController::class);
+    });
 });
 
-
-//NEW POST MAS IVAN NO UI
-
-Route::get('/newposts',[
-	App\Http\Controllers\PostnewController::class,'index'
-]);
-
-Route::get('/newposts/create',[
-	App\Http\Controllers\PostnewController::class,'create'
-]);
-
-Route::get('/newposts/{id}',[
-	App\Http\Controllers\PostnewController::class,'show'
-]);
-
-Route::get('/newposts/{id}/update',[
-	App\Http\Controllers\PostnewController::class,'update'
-]);
-
-Route::get('/newposts/{id}/delete',[
-	App\Http\Controllers\PostnewController::class,'destroy'
-]);
+require __DIR__.'/auth.php';

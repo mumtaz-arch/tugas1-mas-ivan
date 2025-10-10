@@ -1,66 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" href="{{asset('bootstrap/css/bootstrap.min.css')}}">
-	{{-- <link rel="stylesheet" href="{{asset('style.css')}}"> --}}
-	<title>Full Data</title>
-</head>
-<body class="container mt-3">
+@extends('layouts.app')
 
+@section('title', 'Posts')
 
-	<h1>Tabel post</h1>
-	<a href="{{ route('posts.create') }}" class="btn btn-success mb-3">tambah post</a>
-	{{-- {{ dd(session()->all()) }} --}}
-	@if (session('success'))
-		<div class="alert alert-success">
-			{{ session('success') }}
-		</div>
-	@endif
-	<table class="table table-bordered">
-		<tr>
-			<th>No</th>
-			<th>Judul</th>
-			<th>Isi</th>
-			<th>Tanggal terbit</th>
-			<th>Gambar</th>
-			<th>Penulis</th>
-			<th>Aksi</th>
-		</tr>
-		@forelse ($posts as $post)
-		<tr>
-			<td>{{ $loop->iteration }}</td>
-			<td>{{ $post->title }}</td>
-			<td>{{ $post->content }}</td>
-			<td>{{ $post->published_at }}</td>
-			<td>
-				@if ($post->image)
-					<img src="{{ asset('image/' . $post->image) }}" alt="{{ $post->title }}" width="100">
-				@else
-					Tidak ada gambar
-				@endif
-			</td>
-			<td>{{ $post->user ? $post->user->name : 'Penulis tidak ditemukan' }}</td>
-			<td class="text-center">
-    			<a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning btn-sm ">Edit</a>
-    			<form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
-        			@csrf
-        			@method('DELETE')
-        			<button type="submit" onclick="return confirm('Yakin hapus?')" class="btn btn-danger btn-sm">Delete</button>
-    			</form>
-			</td>
+@section('content')
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Posts</h2>
+        <a href="{{ route('posts.create') }}" class="btn btn-primary">Create New Post</a>
+    </div>
 
-		</tr>
-		@empty
-		<tr>
-			<td colspan="6">Tidak ada data</td>
-		</tr>
-		@endforelse
-	</table>
-	<div>
-		{{ $posts->links() }}
-	</div> 
-</body>
-</html>
+    <!-- Search Form -->
+    <form method="GET" action="{{ route('posts.index') }}" class="mb-3">
+        <div class="row">
+            <div class="col-md-8">
+                <input type="text" name="search" class="form-control" placeholder="Search posts by title or content..." value="{{ request('search') }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-outline-secondary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Published Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($posts as $post)
+                <tr>
+                    <td>{{ $post->title }}</td>
+                    <td>{{ $post->user->name }}</td>
+                    <td>{{ $post->publish_date->format('Y-m-d') }}</td>
+                    <td>
+                        @if($post->is_publish)
+                            <span class="badge bg-success">Published</span>
+                        @else
+                            <span class="badge bg-warning">Draft</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('posts.show', $post) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('posts.edit', $post) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('posts.destroy', $post) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">No posts found</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    {{ $posts->links() }}
+</div>
+@endsection

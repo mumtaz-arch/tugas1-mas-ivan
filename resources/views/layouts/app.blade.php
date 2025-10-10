@@ -1,65 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		@yield('title', 'Example')
-	</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', 'Tugas Mas Ivan')</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
 
-	<!-- Bootstrap core CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* ini kunci biar user-info turun ke bawah */
+            position: fixed;
+            padding-top: 20px;
+        }
 
-	<!-- Custom styles for this template -->
-	<link href="{{ asset('admin/css/custom.css') }}" rel="stylesheet">
+        .sidebar a {
+            color: #adb5bd;
+            padding: 10px 15px;
+            display: block;
+            text-decoration: none;
+        }
 
-	@stack('styles')
+        .sidebar a:hover, .sidebar .active {
+            background-color: #495057;
+            color: white;
+        }
+
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+
+        .sidebar .nav-link:hover {
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .sidebar-header {
+            padding: 0 15px 20px 15px;
+            border-bottom: 1px solid #495057;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            padding: 15px;
+            border-top: 1px solid #495057;
+            text-align: center;
+        }
+    </style>
 </head>
-
 <body>
-    @include('components.navbar')
+    <div class="sidebar">
+        <div>
+            <div class="sidebar-header">
+                <h4 class="text-white">Tugas Mas Ivan</h4>
+            </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                </li>
+
+                @auth
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
+                    </li>
+
+                    @if(auth()->user()->role === 1)
                         <li class="nav-item">
-							<a class="nav-link {{ Route::is('home') ? 'active' : '' }}" href="{{ route('home') }}">
-								<span data-feather="home"></span>
-								Dashboard
-							</a>
-						</li>
+                            <a class="nav-link" href="{{ route('users.index') }}">Users</a>
+                        </li>
+                    @endif
 
-						<li class="nav-item">
-							<a class="nav-link {{ Route::is('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-								<span data-feather="users"></span>
-								Data User
-							</a>
-						</li>
-                    </ul>
-                </div>
-            </nav>
-
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">@yield('header-title', 'Example')</h1>
-                </div>
-
-				@yield('content')
-            </main>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('profile.edit') }}">Profile</a>
+                    </li>
+                @endauth
+            </ul>
         </div>
-    </div>
-	<script src="https://unpkg.com/feather-icons"></script>
-	<script>
-    feather.replace();
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-  	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	@stack('scripts')
-</body>
 
+        @auth
+            <div class="user-info">
+                <p class="mb-1">{{ Auth::user()->name }}</p>
+                <small class="text-light">{{ Auth::user()->email }}</small>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="mt-2">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-outline-light w-100">Logout</button>
+                </form>
+            </div>
+        @else
+            <div class="user-info">
+                <a href="{{ route('login') }}" class="btn btn-outline-light w-100 mb-2">Login</a>
+                <a href="{{ route('register') }}" class="btn btn-primary w-100">Register</a>
+            </div>
+        @endauth
+    </div>
+
+    <div class="main-content">
+
+
+        @yield('content')
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

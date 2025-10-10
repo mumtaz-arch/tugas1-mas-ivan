@@ -1,66 +1,82 @@
 @extends('layouts.app')
 
-@push('styles')
-@endpush
-
-@section('title', 'Halaman Edit User')
-@section('header-title', 'Halaman Edit User')
-
+@section('title', 'Edit User')
 
 @section('content')
-	<form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+<div class="container">
+    <h2>Edit User</h2>
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Nama</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
-    </div>
+    <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}" required>
-		@error('username')
-	   			<div class="text-danger">{{ $message }}</div>
-		@enderror
-    </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username', $user->username) }}" required>
+            @error('username')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
-		@error('email')
-       			<div class="text-danger">{{ $message }}</div>
-    	@enderror
-    </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <div class="mb-3">
-        <label for="password" class="form-label">Password Baru</label>
-        <input type="password" class="form-control" id="password" name="password">
-        <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
-		@error('password')
-       			<div class="text-danger">{{ $message }}</div>
-    	@enderror
-    </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <div class="mb-3">
-        <label for="photo" class="form-label">Foto</label>
-        <input type="file" class="form-control" id="photo" name="photo">
-        @if($user->photo)
-            <p>Foto saat ini:</p>
-            <img src="{{ asset('photos/'.$user->photo) }}" alt="Foto User" width="100">
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+            <div class="form-text">Leave blank to keep current password</div>
+            @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-        @endif
-		@error('photo')
-	   			<div class="text-danger">{{ $message }}</div>
-		@enderror
-    </div>
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+        </div>
 
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
-</form>
+        <div class="mb-3">
+            <label for="photo" class="form-label">Photo</label>
+            <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo">
+            <div class="form-text">Format: jpeg, png, jpg | Max: 2MB</div>
+            @error('photo')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            
+            @if($user->photo)
+                <div class="mt-2">
+                    <p>Current Photo:</p>
+                    <img src="{{ asset('photos/' . $user->photo) }}" alt="Current Photo" width="100">
+                </div>
+            @endif
+        </div>
 
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-control @error('role') is-invalid @enderror" id="role" name="role" required>
+                <option value="2" {{ old('role', $user->role) == 2 ? 'selected' : '' }}>User</option>
+                <option value="1" {{ old('role', $user->role) == 1 ? 'selected' : '' }}>Admin</option>
+            </select>
+            @error('role')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update User</button>
+        <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
 @endsection
-
-@push('scripts')
-
-@endpush

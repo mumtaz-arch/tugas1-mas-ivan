@@ -10,12 +10,25 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-		$users = User::latest()->paginate(5);
+        $search = $request->input('search');
+        
+        $query = User::query();
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('username', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        $users = $query->latest()->paginate(5);
 
         return view('user.index',[
-			'users' => $users
+			'users' => $users,
+            'search' => $search
 		]);
     }
 
@@ -42,6 +55,7 @@ class UserController extends Controller
 			'email' => 'required|email|unique:users,email',
 			'password' => 'nullable|string|min:6|',
 			'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+			'role' => 'required|in:1,2',
 
 		], [
         // custom message
@@ -55,8 +69,7 @@ class UserController extends Controller
 		'email.unique' => 'Email sudah terdaftar.',
 		'password.min' => 'Password minimal 6 karakter.',
 		'username.unique' => 'Username sudah terdaftar.',
-		
-
+		'role.required' => 'Role harus diisi.',
     ]);
 		//upload photo
 
@@ -72,6 +85,7 @@ class UserController extends Controller
 			'email' => $validated['email'],
 			'password' => bcrypt($validated['password']),
 			'photo' => $photoName,
+			'role' => $validated['role'],
 
 		]);
 		return redirect()->route('users.index')->with('success','Data user berhasil ditambahkan');
@@ -106,9 +120,10 @@ class UserController extends Controller
 		$validated = $request->validate([
 			'name' => 'required|string|max:255',
 			'email' => 'required|email|unique:users,email,' . $user->id,
-			'password' => 'nullable|string|min:6',
+			'password' => 'nullable|confirmed|string|min:6',
 			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
 			'username' => 'required|string|unique:users,username,' . $user->id,
+			'role' => 'required|in:1,2',
 		], [
         // custom message
            'photo.image' => 'File harus berupa gambar.',
@@ -120,6 +135,8 @@ class UserController extends Controller
 			'email.unique' => 'Email sudah terdaftar.',
 			'password.min' => 'Password minimal 6 karakter.',
 			'username.unique' => 'Username sudah terdaftar.',
+			
+			'password.confirmed' => 'Password tidak sesuai.',
 
     ]);
 
@@ -135,6 +152,9 @@ class UserController extends Controller
 
 		$user->name = $validated['name'];
 		$user->email = $validated['email'];
+		$user->role = $validated['role'];
+
+
 
 		if (!empty($validated['password'])) {
 			$user->password = bcrypt($validated['password']);
