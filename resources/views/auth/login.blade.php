@@ -48,7 +48,7 @@
 <body>
   <div class="auth-card">
     <div class="auth-logo">
-      <h2>BlogApp</h2>
+      <h2>Post</h2>
       <p class="text-muted">Sign in to your account</p>
     </div>
 

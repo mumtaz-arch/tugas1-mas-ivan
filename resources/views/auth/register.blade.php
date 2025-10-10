@@ -85,11 +85,11 @@
 </head>
 <body>
 
-
+    
 
   <div class="auth-card">
     <div class="auth-logo">
-      <h2>BlogApp</h2>
+      <h2>Post</h2>
       <p class="text-muted">Create your account</p>
     </div>
 
